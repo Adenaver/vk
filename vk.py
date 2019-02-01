@@ -13,7 +13,7 @@ tok=os.environ.get('vk_token')
 keyboard = VkKeyboard(one_time=True)
 keyboard.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
 def main():
-
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
     vk_session = vk_api.VkApi(token=tok)
 
     longpoll = VkBotLongPoll(vk_session, '168490072')
