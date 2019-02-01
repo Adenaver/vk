@@ -1,2 +1,1 @@
-web: python arterybother.py
-worker: python vk.py
+web: python vk.py
