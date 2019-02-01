@@ -3,6 +3,7 @@ import os
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from flask import Flask, request
+import random
 import psycopg2
 server = Flask(__name__)
 hostname = os.environ.get('hosting')
@@ -33,6 +34,7 @@ def main():
             print(response[0]['first_name'])
             firstName=response[0]['first_name']
             lastName=response[0]['last_name']
+            ms_key=random.randint(1,99999999)
             con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
             cur = con.cursor()
             full_link="https://vk.com/id"+str(event.obj.from_id)
@@ -45,9 +47,11 @@ def main():
                     keyboard.add_button('Отказаться от рассылки', color=VkKeyboardColor.NEGATIVE)
                 vk.messages.send(
                     user_id=event.obj.from_id,
+                    random_id=ms_key,
                     message="Вы можете получить информацию о своем пользователе. Нажав на кнопку 'Мой профиль'",
                     keyboard=keyboard.get_keyboard()
                 )
+                con.close()
             elif event.obj.text=="Подписаться на рассылку новостей":
                 keyboard1.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
                 keyboard1.add_button('Отказаться от рассылки', color=VkKeyboardColor.NEGATIVE)
@@ -57,6 +61,7 @@ def main():
                 cur.execute("UPDATE users SET status = true WHERE vk = %s",(id,))
                 vk.messages.send(
                     user_id=event.obj.from_id,
+                    random_id=ms_key,
                     message="Вы успешно подписались на рассылку новостей. В любой момент вы можете от неё отказатся нажав на кнопку 'Отказаться от рассылки'",
                     keyboard=keyboard1.get_keyboard()
                 )
@@ -70,6 +75,7 @@ def main():
                 cur.execute("UPDATE users SET status = false WHERE vk = %s",(id,))
                 vk.messages.send(
                     user_id=event.obj.from_id,
+                    random_id=ms_key,
                     message="Вы успешно отказались от рассылки новостей. В любой момент вы можете от неё отказатся нажав на кнопку 'Отказаться от рассылки'",
                     keyboard=keyboard2.get_keyboard()
                 )
@@ -84,6 +90,7 @@ def main():
                     bd_data=cur.fetchone()
                     vk.messages.send(
                         user_id=event.obj.from_id,
+                        random_id=ms_key,
                         message="Профиль\nИмя: "+str(bd_data[1])+"\nSTEAMID: "+str(bd_data[0])+"\nСтатус: "+str(bd_data[5])+"\n\nДоступные ПС: "+str(bd_data[7])+"\nДоступные звания: "+str(bd_data[8])+"\nТалон: "+str(bd_data[9]),
                         keyboard=keyboard.get_keyboard()
                     )
@@ -91,11 +98,12 @@ def main():
                 except Exception as e:
                     vk.messages.send(
                         user_id=event.obj.from_id,
+                        random_id=ms_key,
                         message="Информации по вашему аккаунту нет.\nВозможно вы не подали анкету на участие в проекте. Или же ваш аккаунт ещё не добавили в базу.",
                         keyboard=keyboard.get_keyboard()
                     )
             else:
-                pass
+                con.close()
         elif event.type == VkBotEventType.MESSAGE_REPLY:
             print('Новое сообщение:')
 
