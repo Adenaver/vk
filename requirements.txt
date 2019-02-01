@@ -1,0 +1,6 @@
+pyTelegramBotAPI
+psycopg2
+flask
+psycopg2-binary
+datetime
+vk_api
