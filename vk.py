@@ -139,7 +139,9 @@ def main():
         else:
             print(event.type)
             print()
-
+@server.route("/alive")
+def webhook():
+    main()
 @server.route("/")
 def webhook():
     return "!", 200
