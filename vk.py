@@ -11,8 +11,6 @@ username = os.environ.get('user')
 password = os.environ.get('password')
 database = os.environ.get('bdname')
 tok=os.environ.get('vk_token')
-keyboard = VkKeyboard(one_time=True)
-keyboard.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
 def main():
 
     vk_session = vk_api.VkApi(token=tok)
@@ -34,6 +32,8 @@ def main():
             print(response[0]['first_name'])
             firstName=response[0]['first_name']
             lastName=response[0]['last_name']
+            keyboard = VkKeyboard(one_time=True)
+            keyboard.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
             ms_key=random.randint(1,99999999)
             con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
             cur = con.cursor()
@@ -53,6 +53,7 @@ def main():
                 )
                 con.close()
             elif event.obj.text=="Подписаться на рассылку новостей":
+                keyboard1 = VkKeyboard(one_time=True)
                 keyboard1.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
                 keyboard1.add_button('Отказаться от рассылки', color=VkKeyboardColor.NEGATIVE)
                 con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
@@ -67,6 +68,7 @@ def main():
                 )
 
             elif event.obj.text=="Отказаться от рассылки":
+                keyboard2 = VkKeyboard(one_time=True)
                 keyboard2.add_button('Мой профиль', color=VkKeyboardColor.PRIMARY)
                 keyboard2.add_button('Подписаться на рассылку новостей', color=VkKeyboardColor.POSITIVE)
                 con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
