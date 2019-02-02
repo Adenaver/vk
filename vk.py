@@ -140,7 +140,7 @@ def main():
             print(event.type)
             print()
 @server.route("/alive")
-def webhook():
+def webhook1():
     main()
 @server.route("/")
 def webhook():
