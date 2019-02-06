@@ -57,7 +57,7 @@ def main():
                 con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
                 cur = con.cursor()
                 full_link="https://vk.com/id"+str(event.obj.from_id)
-                cur.execute("UPDATE users SET status = true WHERE vk = %s",(full_link,))
+                cur.execute("UPDATE users SET mailing = true WHERE vk = %s",(full_link,))
                 con.commit()
                 con.close()
                 vk.messages.send(
@@ -74,7 +74,7 @@ def main():
                 con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
                 cur = con.cursor()
                 full_link="https://vk.com/id"+str(event.obj.from_id)
-                cur.execute("UPDATE users SET status = false WHERE vk = %s",(full_link,))
+                cur.execute("UPDATE users SET mailing = false WHERE vk = %s",(full_link,))
                 con.commit()
                 con.close()
                 vk.messages.send(
