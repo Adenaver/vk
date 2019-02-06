@@ -2,10 +2,8 @@ import vk_api
 import os
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
-from flask import Flask, request
 import random
 import psycopg2
-server = Flask(__name__)
 hostname = os.environ.get('hosting')
 username = os.environ.get('user')
 password = os.environ.get('password')
@@ -60,6 +58,8 @@ def main():
                 cur = con.cursor()
                 full_link="https://vk.com/id"+str(event.obj.from_id)
                 cur.execute("UPDATE users SET status = true WHERE vk = %s",(full_link,))
+                con.commit()
+                con.close()
                 vk.messages.send(
                     user_id=event.obj.from_id,
                     random_id=ms_key,
@@ -75,6 +75,8 @@ def main():
                 cur = con.cursor()
                 full_link="https://vk.com/id"+str(event.obj.from_id)
                 cur.execute("UPDATE users SET status = false WHERE vk = %s",(full_link,))
+                con.commit()
+                con.close()
                 vk.messages.send(
                     user_id=event.obj.from_id,
                     random_id=ms_key,
@@ -141,12 +143,5 @@ def main():
         else:
             print(event.type)
             print()
-@server.route("/alive")
-def webhook1():
-    main()
-@server.route("/")
-def webhook():
-    return "!", 200
 if __name__ == '__main__':
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
-main()
+    main()
