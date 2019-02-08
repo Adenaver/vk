@@ -86,6 +86,10 @@ def main():
                 #invoice_message(event.obj.from_id,event.obj.text,firstName,lastName)
             elif event.obj.text=="Мой профиль":
                 try:
+                    if bd_data[10]=="null" or bd_data[10]=="false":
+                        keyboard.add_button('Подписаться на рассылку новостей', color=VkKeyboardColor.POSITIVE)
+                    elif bd_data[10]=="true":
+                        keyboard.add_button('Отказаться от рассылки', color=VkKeyboardColor.NEGATIVE)
                     con = psycopg2.connect( host=hostname, user=username, password=password, dbname=database )
                     cur = con.cursor()
                     full_link="https://vk.com/id"+str(event.obj.from_id)
