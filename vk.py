@@ -80,7 +80,7 @@ def main():
                 vk.messages.send(
                     user_id=event.obj.from_id,
                     random_id=ms_key,
-                    message="Вы успешно отказались от рассылки новостей. В любой момент вы можете от неё отказатся нажав на кнопку 'Отказаться от рассылки'",
+                    message="Вы успешно отказались от рассылки новостей. В любой момент вы можете подписаться на рассылку нажав на кнопку 'Подписаться на рассылку новостей'",
                     keyboard=keyboard2.get_keyboard()
                 )
                 #invoice_message(event.obj.from_id,event.obj.text,firstName,lastName)
